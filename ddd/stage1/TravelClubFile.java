@@ -60,7 +60,7 @@ public class TravelClubFile implements TravelClubStore {
 		return count; 
 	}
 	
-	public boolean exist(String name) {
+	public boolean exist(String id) {
 		// 
         boolean found = false;
         BufferedReader reader; 
@@ -74,7 +74,7 @@ public class TravelClubFile implements TravelClubStore {
 					break; 
 				}
 				
-				if (hasName(line, name)) {
+				if (hasId(line, id)) {
 					found = true; 
 					break; 
 				}; 
@@ -90,7 +90,7 @@ public class TravelClubFile implements TravelClubStore {
 	@Override
 	public void create(TravelClub club) {
 		//
-		if (this.exist(club.getName())) {
+		if (this.exist(club.getId())) {
 			return; 
 		}
 		
@@ -118,7 +118,7 @@ public class TravelClubFile implements TravelClubStore {
 					return null;
 				}
 				
-				if (hasName(line, clubId)) {
+				if (hasId(line, clubId)) {
 					resultClub = convertToObject(line); 
 					break; 
 				}; 
@@ -194,10 +194,10 @@ public class TravelClubFile implements TravelClubStore {
 	        writer = new PrintWriter(new FileWriter(tempFile)); 
 	        
 	        String line = null;
-	        String name = club.getName(); 
+	        String id = club.getId(); 
 	        
 	        while ((line = reader.readLine()) != null) {
-	        	if (hasName(line, name)) { 
+	        	if (hasId(line, id)) { 
 	        		line = convertToStr(club); 
 	        	}
 	            writer.println(line);
@@ -221,10 +221,10 @@ public class TravelClubFile implements TravelClubStore {
 
 	public void delete(TravelClub club) {
 		//
-		this.remove(club.getName());
+		this.delete(club.getId());
 	}
 
-	public void remove(String name) {
+	public void delete(String id) {
 		// 
 		BufferedReader reader;
         PrintWriter writer;
@@ -236,7 +236,7 @@ public class TravelClubFile implements TravelClubStore {
 	        String line = null;
 	        
 	        while ((line = reader.readLine()) != null) {
-	        	if (hasName(line, name)) { 
+	        	if (hasId(line, id)) { 
 	        		continue; 
 	        	}
 	            writer.println(line);
@@ -262,6 +262,7 @@ public class TravelClubFile implements TravelClubStore {
 		// 
 		StringTokenizer tokenizer = new StringTokenizer(line, delimiter);
 
+		tokenizer.nextToken();
 		String token = tokenizer.nextToken();
 		if (name.equals(token)) {
 			return true;
@@ -270,10 +271,24 @@ public class TravelClubFile implements TravelClubStore {
 		}
 	}
 	
+	private boolean hasId(String line, String id) {
+		// 
+		StringTokenizer tokenizer = new StringTokenizer(line, delimiter);
+
+		String token = tokenizer.nextToken();
+		if (id.equals(token)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	private String convertToStr(TravelClub club) {
 		// 
 		StringBuilder builder = new StringBuilder(); 
 		
+		builder.append(club.getId()); 
+		builder.append(this.delimiter); 
 		builder.append(club.getName()); 
 		builder.append(this.delimiter); 
 		builder.append(club.getIntro()); 
@@ -287,9 +302,12 @@ public class TravelClubFile implements TravelClubStore {
 		TravelClub resultClub = null; 
 		
 		try {
+			String id = tokenizer.nextToken(); 
 			String name = tokenizer.nextToken(); 
 			String intro = tokenizer.nextToken(); 
-			resultClub = new TravelClub(name, intro); 
+			resultClub = new TravelClub(id); 
+			resultClub.setName(name); 
+			resultClub.setIntro(intro);
 		} catch (NoSuchElementException e) {
 			//
 			e.printStackTrace(); 

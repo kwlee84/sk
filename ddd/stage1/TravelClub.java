@@ -13,13 +13,13 @@ public class TravelClub extends Identity {
 	private String name; 
 	private String intro; 
 	
-	public TravelClub() {
-		super(); 
+	public TravelClub(String id) {
+		super(id); 
 	}
 	
 	public TravelClub(String name, String intro) {
 		//
-		this(); 
+		super(); 
 		this.name = name;
 		this.intro = intro;
 	}
