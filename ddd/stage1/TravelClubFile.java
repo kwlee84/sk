@@ -206,14 +206,15 @@ public class TravelClubFile implements TravelClubStore {
 	        writer.close();
 	        reader.close();
 	        
+	        if (!tempFile.renameTo(this.createFile(fileName))) { 
+	            System.out.println("Could not rename file");
+	        }
+	        
 	        if (!tempFile.delete()) {
 	            System.out.println("Could not delete file");
 	            return;
 	        }
 
-	        if (!tempFile.renameTo(this.createFile(fileName))) { 
-	            System.out.println("Could not rename file");
-	        }
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -245,14 +246,15 @@ public class TravelClubFile implements TravelClubStore {
 	        writer.close();
 	        reader.close();
 	        
+	        if (!tempFile.renameTo(this.createFile(fileName))) { 
+	            System.out.println("Could not rename file");
+	        }
+
 	        if (!tempFile.delete()) {
 	            System.out.println("Could not delete file");
 	            return;
 	        }
 
-	        if (!tempFile.renameTo(this.createFile(fileName))) { 
-	            System.out.println("Could not rename file");
-	        }
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
